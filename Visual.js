@@ -33,20 +33,29 @@ function clique(linha, coluna, casa) {
 
 function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
 
-    const podeMover = movimentoValido(
-        dadosDoTabuleiro,
-        inicioLinha,
-        inicioColuna,
-        fimLinha,
-        fimColuna
-    );
-
-    if (!podeMover) {
-        return;
+    if (!movimentoValido(dadosDoTabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)) {
+        return false; 
     }
 
-  
     const peca = dadosDoTabuleiro[inicioLinha][inicioColuna];
+    
+    if (peca.tipo === "rei" && Math.abs(inicioColuna - fimColuna) === 2) {
+        
+        if (fimColuna < inicioColuna) {
+            const torre = dadosDoTabuleiro[inicioLinha][0];
+            dadosDoTabuleiro[inicioLinha][3] = torre; 
+            dadosDoTabuleiro[inicioLinha][0] = null;  
+            if (torre) torre.moveu = true;
+        } 
+
+        else {
+            const torre = dadosDoTabuleiro[inicioLinha][7];
+            dadosDoTabuleiro[inicioLinha][5] = torre; 
+            dadosDoTabuleiro[inicioLinha][7] = null;  
+            if (torre) torre.moveu = true;
+        }
+    }
+  
 
     
     dadosDoTabuleiro[fimLinha][fimColuna] = peca;
