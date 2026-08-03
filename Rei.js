@@ -13,13 +13,40 @@ export function validarRei(tabuleiro,
 
     const destino = tabuleiro[fimLinha][fimColuna];
     if (destino && destino.cor === corRei) { return false; }
-    
-    if(diffLinha === 0 && diffColuna === 2 && rei.moveu === false){
-        console.log("asdasdasdasd")
-    }
 
-    if (diffLinha > 1 || diffColuna > 1) {
-        return false;
+    if (diffLinha === 0 && (inicioColuna - fimColuna) === -2 && rei.moveu === false) {
+
+        const torre = tabuleiro[inicioLinha][inicioColuna + 3]
+
+        if (torre.moveu === false) {
+            if(tabuleiro[inicioLinha][5] || tabuleiro[inicioLinha][6]){
+                return false;
+            }else{
+                return true;
+            }
+
+        } else {
+            return false;
+        }
+
+    } else if (diffLinha === 0 && (inicioColuna - fimColuna) === 2) {
+
+        const torre = tabuleiro[inicioLinha][inicioColuna - 4]
+
+        if (torre.moveu === false) {
+            if(tabuleiro[inicioLinha][3] || tabuleiro[inicioLinha][2] || tabuleiro[inicioLinha][1]){
+                return false;
+            }else{
+                return true;
+            }
+        } else {
+            return false;
+        }
+
+
+        if (diffLinha > 1 || diffColuna > 1) {
+            return false;
+        }
+        return true;
     }
-    return true;
 }
