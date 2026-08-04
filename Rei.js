@@ -43,10 +43,9 @@ export function validarRei(tabuleiro,
             return false;
         }
 
-
-        if (diffLinha > 1 || diffColuna > 1) {
+    }
+    if (diffLinha > 1 || diffColuna > 1) {
             return false;
         }
         return true;
-    }
 }
