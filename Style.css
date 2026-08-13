@@ -1,0 +1,147 @@
+:root{
+    --cor-fundo: #222;
+    --cor-borda-tabuleiro: white;
+    --cor-botao: #333333;
+    --cor-casa-branca-default: #f0d9b5;
+    --cor-casa-preta-default: #b58863;
+    --cor-casa-selecionada: #ffff99;
+    --cor-casa-branca-pixelart: #e0e8d0;
+    --cor-casa-preta-pixelart: #709080;
+}
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    background: var(--cor-fundo);
+}
+
+#all-content{
+    display: inline-flex;
+
+}
+
+#tabuleiro {
+    display: grid;
+
+    grid-template-columns: repeat(8, 80px);
+    grid-template-rows: repeat(8, 80px);
+
+    border: 5px solid var(--cor-borda-tabuleiro);
+}
+
+
+
+#trocar-pecas{
+    background-color: var(--cor-botao);
+    min-height: 15px;
+    max-height: 30px;
+
+    color: var(--cor-borda-tabuleiro);
+    border-radius: 12px;
+    border: 2px solid #404040;
+    
+    cursor: pointer;
+    
+}
+
+.peca {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.peca.peao.branco.default { background-image: url(Imagens/Peao_branco_default.png);}
+.peca.torre.branco.default { background-image: url(Imagens/Torre_branco_default.png);}
+.peca.cavalo.branco.default { background-image: url(Imagens/Cavalo_branco_default.png);}
+.peca.bispo.branco.default { background-image: url(Imagens/Bispo_branco_default.png);}
+.peca.dama.branco.default { background-image: url(Imagens/Dama_branco_default.png);}
+.peca.rei.branco.default { background-image: url(Imagens/Rei_branco_default.png);}
+
+.peca.peao.preto.default { background-image: url(Imagens/Peao_preto_default.png);}
+.peca.torre.preto.default { background-image: url(Imagens/Torre_preto_default.png);}
+.peca.cavalo.preto.default { background-image: url(Imagens/Cavalo_preto_default.png);}
+.peca.bispo.preto.default { background-image: url(Imagens/Bispo_preto_default.png);}
+.peca.dama.preto.default { background-image: url(Imagens/Dama_preto_default.png);}
+.peca.rei.preto.default { background-image: url(Imagens/Rei_preto_default.png);}
+
+.peca.peao.branco.pixelart { background-image: url(Imagens/Peao_branco_pixelart.png);}
+.peca.torre.branco.pixelart { background-image: url(Imagens/Torre_branco_pixelart.png);}
+.peca.cavalo.branco.pixelart { background-image: url(Imagens/Cavalo_branco_pixelart.png);}
+.peca.bispo.branco.pixelart { background-image: url(Imagens/Bispo_branco_pixelart.png);}
+.peca.dama.branco.pixelart { background-image: url(Imagens/Dama_branco_pixelart.png);}
+.peca.rei.branco.pixelart { background-image: url(Imagens/Rei_branco_pixelart.png);}
+
+.peca.peao.preto.pixelart { background-image: url(Imagens/Peao_preto_pixelart.png);}
+.peca.torre.preto.pixelart { background-image: url(Imagens/Torre_preto_pixelart.png);}
+.peca.cavalo.preto.pixelart { background-image: url(Imagens/Cavalo_preto_pixelart.png);}
+.peca.bispo.preto.pixelart { background-image: url(Imagens/Bispo_preto_pixelart.png);}
+.peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
+.peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
+
+.pixelart{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.casabranca {
+    background-color: var(--cor-casa-branca-default);
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.casapreta {
+    background-color: var(--cor-casa-preta-default);
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.pixelart .casabranca, 
+.casabranca.pixelart {
+    background-color: var(--cor-casa-branca-pixelart);
+}
+
+.pixelart .casapreta, 
+.casapreta.pixelart {
+    background-color: var(--cor-casa-preta-pixelart);
+}
+
+
+.casabranca.selecionada,
+.casapreta.selecionada {
+    background-color: var(--cor-casa-selecionada);
+}
+
+.casabranca:hover {
+    filter: brightness(1.1);
+}
+
+.casapreta:hover {
+    filter: brightness(1.1);
+}
