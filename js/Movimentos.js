@@ -15,7 +15,7 @@ export function movimentoValido(
     const peca = tabuleiro[inicioLinha][inicioColuna]
 
     if (peca.tipo === "peao"){
-        return validarPeao(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna) //tem que adicionar isso pra cada peça e fazer os arquivos de validação respectivamente
+        return validarPeao(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna) 
     }
     else if (peca.tipo === "torre"){
         return validarTorre(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
