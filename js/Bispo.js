@@ -13,14 +13,6 @@ export function validarBispo(tabuleiro,
 
     if (Math.abs(diffColuna) !== Math.abs(diffLinha)) { return false; }
 
-    const peca = tabuleiro[inicioLinha][inicioColuna];
-    if (!peca) return false;
-    const corBispo = peca.cor;
-
-
-    const destino = tabuleiro[fimLinha][fimColuna];
-    if (destino && destino.cor === corBispo) {return false;}
-
     distancia = Math.abs(diffColuna)
 
     for (let i = 1; i < distancia; i++) {
