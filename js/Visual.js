@@ -37,6 +37,15 @@ function clique(linha, coluna, casa) {
 
         }
     } else {
+        const destino = dadosDoTabuleiro[linha][coluna];
+        const peca = dadosDoTabuleiro[clique1.linha][clique1.coluna];
+
+        if(destino && peca.cor === destino.cor){
+            clique1.elemento.classList.remove("selecionada");
+            clique1 = {linha, coluna, elemento: casa}; 
+            casa.classList.add("selecionada");
+            return;
+        }
         if (
             clique1.linha === linha &&
             clique1.coluna === coluna
@@ -54,12 +63,23 @@ function clique(linha, coluna, casa) {
 }
 
 function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
+    
+    const peca = dadosDoTabuleiro[inicioLinha][inicioColuna];
+    const destino = dadosDoTabuleiro[fimLinha][fimColuna];
+    
+    if(destino && destino.cor === peca.cor){
+        return false
+    }
 
     if (!movimentoValido(dadosDoTabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)) {
         return false; 
     }
 
-    const peca = dadosDoTabuleiro[inicioLinha][inicioColuna];
+    
+
+    if(destino && destino.cor === peca.cor){
+        return false
+    }
     
     if (peca.tipo === "rei" && Math.abs(inicioColuna - fimColuna) === 2) {
         
