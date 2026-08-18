@@ -11,17 +11,7 @@ export function validarTorre(tabuleiro,
     let diffLinha = Math.abs(fimLinha - inicioLinha);
 
     if (inicioLinha !== fimLinha && inicioColuna !== fimColuna) {return false;}
-
-    const peca = tabuleiro[inicioLinha][inicioColuna];
-    if (!peca) return false;
-    const corTorre = peca.cor;
-
-    
-    const destino = tabuleiro[fimLinha][fimColuna];
-    if (destino && destino.cor === corTorre) {
-        return false; 
-    }
-
+        
     diffColuna > diffLinha ? distancia = diffColuna : distancia = diffLinha
     
     for (let i = 1; i < distancia; i++) {
