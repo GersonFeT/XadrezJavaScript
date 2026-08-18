@@ -5,14 +5,7 @@ export function validarRei(tabuleiro,
     fimColuna) {
     let diffLinha = Math.abs(inicioLinha - fimLinha)
     let diffColuna = Math.abs(inicioColuna - fimColuna)
-
-    const rei = tabuleiro[inicioLinha][inicioColuna];
-    if (!rei) return false;
-    const corRei = rei.cor;
-
-
-    const destino = tabuleiro[fimLinha][fimColuna];
-    if (destino && destino.cor === corRei) { return false; }
+    const rei = tabuleiro[inicioLinha][inicioColuna]
 
     if (diffLinha === 0 && (inicioColuna - fimColuna) === -2 && rei.moveu === false) {
 
