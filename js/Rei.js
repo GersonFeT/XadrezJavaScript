@@ -35,6 +35,7 @@ export function validarRei(tabuleiro,
         } else {
             return false;
         }
+    }
     const direcoes = [[-1,  0], [ 1,  0], [ 0, -1], [ 0,  1], [-1, -1], [-1,  1], [ 1, -1], [ 1,  1]];
     for(const [linha, coluna] of direcoes){
         for(let i = 1; i < tabuleiro.length; i++){
@@ -83,9 +84,9 @@ export function validarRei(tabuleiro,
         }
     }
         
-    }
+    
     if (diffLinha > 1 || diffColuna > 1) {
             return false;
         }
         return true;
-}
+    }
