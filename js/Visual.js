@@ -7,6 +7,8 @@ const tabuleiroHTML = document.getElementById("tabuleiro");
 
 const botaoPecas = document.getElementById("trocar-pecas");
 
+const promocaoCSS = document.getElementById("promocao");
+
 const branco = "branco";
 const preto = "preto";
 let turno = branco;
@@ -40,9 +42,9 @@ function clique(linha, coluna, casa) {
         const destino = dadosDoTabuleiro[linha][coluna];
         const peca = dadosDoTabuleiro[clique1.linha][clique1.coluna];
 
-        if(destino && peca.cor === destino.cor){
+        if (destino && peca.cor === destino.cor) {
             clique1.elemento.classList.remove("selecionada");
-            clique1 = {linha, coluna, elemento: casa}; 
+            clique1 = { linha, coluna, elemento: casa };
             casa.classList.add("selecionada");
             return;
         }
@@ -63,49 +65,94 @@ function clique(linha, coluna, casa) {
 }
 
 function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
-    
+
     const peca = dadosDoTabuleiro[inicioLinha][inicioColuna];
     const destino = dadosDoTabuleiro[fimLinha][fimColuna];
-    
-    if(destino && destino.cor === peca.cor){
+
+    if (destino && destino.cor === peca.cor) {
         return false
     }
 
     if (!movimentoValido(dadosDoTabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)) {
-        return false; 
+        return false;
     }
 
-    
 
-    if(destino && destino.cor === peca.cor){
+
+    if (destino && destino.cor === peca.cor) {
         return false
     }
-    
+
+    if (peca.tipo === "peao" && (fimLinha === 0 || fimLinha === 7)) {
+        for(let i = 1; i <= 4; i++){
+            const divpeca = document.createElement("div");
+            
+            if(peca.cor === "branco"){
+                switch(i){
+                    case 1: currentTheme === 'default'? divpeca.classList.add("opcao-promocao", "peca", "dama", "branco", "default")
+                    :promocaoCSS.classList.add("opcao-promocao", "peca", "dama", "branco", "pixelart");
+                    break; 
+
+                    case 2: currentTheme === 'default'? divpeca.classList.add("opcao-promocao", "peca", "torre", "branco", "default")
+                    :promocaoCSS.classList.add("opcao-promocao", "peca", "torre", "branco", "pixelart");
+                    break;
+
+                    case 3: currentTheme === 'default'? divpeca.classList.add("opcao-promocao", "peca", "bispo", "branco", "default")
+                    :promocaoCSS.classList.add("opcao-promocao", "peca", "bispo", "branco", "pixelart");
+                    break;
+
+                    case 4: currentTheme === 'default'? divpeca.classList.add("opcao-promocao", "peca", "cavalo", "branco", "default")
+                    :promocaoCSS.classList.add("opcao-promocao", "peca", "cavalo", "branco", "pixelart");
+                    break;
+                }
+            } else{
+                switch(i){
+                    case 1: currentTheme === 'default'? divpeca.classList.add("opcao-promocao", "peca", "dama", "preto", "default")
+                    :promocaoCSS.classList.add("opcao-promocao", "peca", "dama", "preto", "pixelart");
+                    break; 
+
+                    case 2: currentTheme === 'default'? divpeca.classList.add("opcao-promocao", "peca", "torre", "preto", "default")
+                    :promocaoCSS.classList.add("opcao-promocao", "peca", "torre", "preto", "pixelart");
+                    break;
+
+                    case 3: currentTheme === 'default'? divpeca.classList.add("opcao-promocao", "peca", "bispo", "preto", "default")
+                    :promocaoCSS.classList.add("opcao-promocao", "peca", "bispo", "preto", "pixelart");
+                    break;
+
+                    case 4: currentTheme === 'default'? divpeca.classList.add("opcao-promocao", "peca", "cavalo", "preto", "default")
+                    :promocaoCSS.classList.add("opcao-promocao", "peca", "cavalo", "preto", "pixelart");
+                    break;
+                }
+            }
+            promocaoCSS.appendChild(divpeca);
+        }
+    }
+
     if (peca.tipo === "rei" && Math.abs(inicioColuna - fimColuna) === 2) {
-        
+
         if (fimColuna < inicioColuna) {
             const torre = dadosDoTabuleiro[inicioLinha][0];
-            dadosDoTabuleiro[inicioLinha][3] = torre; 
-            dadosDoTabuleiro[inicioLinha][0] = null;  
+            dadosDoTabuleiro[inicioLinha][3] = torre;
+            dadosDoTabuleiro[inicioLinha][0] = null;
             if (torre) torre.moveu = true;
-        } 
+        }
 
         else {
             const torre = dadosDoTabuleiro[inicioLinha][7];
-            dadosDoTabuleiro[inicioLinha][5] = torre; 
-            dadosDoTabuleiro[inicioLinha][7] = null;  
+            dadosDoTabuleiro[inicioLinha][5] = torre;
+            dadosDoTabuleiro[inicioLinha][7] = null;
             if (torre) torre.moveu = true;
         }
     }
-  
 
-    
+
+
     dadosDoTabuleiro[fimLinha][fimColuna] = peca;
     dadosDoTabuleiro[inicioLinha][inicioColuna] = null;
 
-    
+
     peca.moveu = true;
-    
+
     turno === branco ? turno = preto : turno = branco;
 
     atualizarTabuleiro();
@@ -138,7 +185,7 @@ function coisarTabuleiro() {
             } else {
                 casa.classList.add("casapreta");
             }
-            if(currentTheme === "pixelart"){
+            if (currentTheme === "pixelart") {
                 casa.classList.add("pixelart")
             }
 
