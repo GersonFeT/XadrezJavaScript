@@ -21,7 +21,6 @@ body {
 
 #all-content{
     display: inline-flex;
-
 }
 
 #tabuleiro {
@@ -130,6 +129,27 @@ body {
 .pixelart .casapreta, 
 .casapreta.pixelart {
     background-color: var(--cor-casa-preta-pixelart);
+}
+
+#promocao{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-left: 20px; 
+    padding: 15px;
+    background-color: var(--cor-botao);
+    border: 3px solid var(--cor-borda-tabuleiro);
+}
+
+.opcao-promocao {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
 
