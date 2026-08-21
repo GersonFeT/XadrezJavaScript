@@ -47,8 +47,10 @@ export function validarRei(tabuleiro,
  
             if(tabuleiro[linhaAtual][colunaAtual] != null){
                 const destino = tabuleiro[linhaAtual][colunaAtual];
-                  
+                
                 if(rei.cor === destino.cor){ break; }
+                
+                if(destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei"){ break; }
                 
                 if(Math.abs(linhaAtual-fimLinha) === Math.abs(colunaAtual-fimColuna) &&
                     (destino.tipo === "dama" || destino.tipo === "bispo")){
