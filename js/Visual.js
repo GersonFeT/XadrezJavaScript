@@ -1,5 +1,6 @@
 import { inicializarTabuleiro } from './Tabuleiro.js';
 import { movimentoValido } from "./Movimentos.js";
+import { checkValidation } from './Rei.js';
 
 const dadosDoTabuleiro = inicializarTabuleiro();
 
@@ -70,18 +71,40 @@ function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
     const peca = dadosDoTabuleiro[inicioLinha][inicioColuna];
     const destino = dadosDoTabuleiro[fimLinha][fimColuna];
 
+    if (promocao === 1){
+        return
+    }
+
     if (destino && destino.cor === peca.cor) {
-        return false
+        return false;
     }
 
     if (!movimentoValido(dadosDoTabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)) {
         return false;
     }
 
+    const copiaTabuleiro = dadosDoTabuleiro.map(linha => [...linha]);
+
+    copiaTabuleiro[fimLinha][fimColuna] = copiaTabuleiro[inicioLinha][inicioColuna];
+    copiaTabuleiro[inicioLinha][inicioColuna] = null;
+
+    if(!checkValidation(copiaTabuleiro, "branco")){
+        return false;
+    } else if(!checkValidation(copiaTabuleiro, "preto")){
+        return false;
+    }
 
 
     if (destino && destino.cor === peca.cor) {
         return false
+    }
+
+    if (Math.abs(fimColuna - inicioColuna) === 1 &&
+        ((fimLinha - inicioLinha === -1) || (fimLinha - inicioLinha === 1))&&
+        peca.enPassant === true) {
+        peca.enPassant = false;
+        dadosDoTabuleiro[inicioLinha][fimColuna] = null;
+
     }
 
     if (peca.tipo === "rei" && Math.abs(inicioColuna - fimColuna) === 2) {
@@ -127,9 +150,7 @@ function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
         botaoCavalo.addEventListener("click", () => {
             promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, "cavalo")
         });
-    }
-
-    if (promocao === 0) {
+    } else {
         dadosDoTabuleiro[fimLinha][fimColuna] = peca;
         dadosDoTabuleiro[inicioLinha][inicioColuna] = null;
 
@@ -150,6 +171,7 @@ function promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, id) {
     atualizarTabuleiro();
     promocaoCSS.style.display = "none";
     promocao = 0;
+    turno === branco ? turno = preto : turno = branco;
 }
 
 function coisarTabuleiro() {
