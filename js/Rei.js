@@ -12,9 +12,9 @@ export function validarRei(tabuleiro,
         const torre = tabuleiro[inicioLinha][inicioColuna + 3]
 
         if (torre.moveu === false) {
-            if(tabuleiro[inicioLinha][5] || tabuleiro[inicioLinha][6]){
+            if (tabuleiro[inicioLinha][5] || tabuleiro[inicioLinha][6]) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
 
@@ -27,68 +27,144 @@ export function validarRei(tabuleiro,
         const torre = tabuleiro[inicioLinha][inicioColuna - 4]
 
         if (torre.moveu === false) {
-            if(tabuleiro[inicioLinha][3] || tabuleiro[inicioLinha][2] || tabuleiro[inicioLinha][1]){
+            if (tabuleiro[inicioLinha][3] || tabuleiro[inicioLinha][2] || tabuleiro[inicioLinha][1]) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         } else {
             return false;
         }
     }
-    const direcoes = [[-1,  0], [ 1,  0], [ 0, -1], [ 0,  1], [-1, -1], [-1,  1], [ 1, -1], [ 1,  1]];
-    for(const [linha, coluna] of direcoes){
-        for(let i = 1; i < tabuleiro.length; i++){
-            const linhaAtual = fimLinha+(linha*i);
-            const colunaAtual = fimColuna+(coluna*i);
-            
- 
-            if(linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0){ break; }
- 
-            if(tabuleiro[linhaAtual][colunaAtual] != null){
+    const direcoes = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
+    for (const [linha, coluna] of direcoes) {
+        for (let i = 1; i < tabuleiro.length; i++) {
+            const linhaAtual = fimLinha + (linha * i);
+            const colunaAtual = fimColuna + (coluna * i);
+
+
+            if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+            if (tabuleiro[linhaAtual][colunaAtual] != null) {
                 const destino = tabuleiro[linhaAtual][colunaAtual];
-                
-                if(rei.cor === destino.cor){ break; }
-                
-                if(destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei"){ break; }
-                
-                if(Math.abs(linhaAtual-fimLinha) === Math.abs(colunaAtual-fimColuna) &&
-                    (destino.tipo === "dama" || destino.tipo === "bispo")){
-                        console.log("sadasdasd | " + linhaAtual + "|" +colunaAtual)  
+
+                if (rei.cor === destino.cor) { break; }
+
+                if (destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei") { break; }
+
+                if (Math.abs(linhaAtual - fimLinha) === Math.abs(colunaAtual - fimColuna) &&
+                    (destino.tipo === "dama" || destino.tipo === "bispo")) {
+                    console.log("sadasdasd | " + linhaAtual + "|" + colunaAtual)
                     return false;
-                }else if(
-                    (destino.tipo === "dama" || destino.tipo === "torre")){ console.log("poweproiwed | " + linhaAtual + "|" +colunaAtual) 
-                         return false;}
+                } else if (
+                    (destino.tipo === "dama" || destino.tipo === "torre")) {
+                        console.log("poweproiwed | " + linhaAtual + "|" + colunaAtual)
+                    return false;
+                }
             }
         }
     }
- 
-    const direcoesCavalo = [[-2, -1], [-2,  1], [-1, -2], [-1,  2], [ 1, -2], [ 1,  2], [ 2, -1], [ 2,  1]];
-    for(const [linha, coluna] of direcoesCavalo){
-        const linhaAtual = fimLinha+linha;
-        const colunaAtual = fimColuna+coluna;
-         if(linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0){ break; }
- 
-        if(tabuleiro[linhaAtual][colunaAtual] !== null && tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" && tabuleiro[linhaAtual][colunaAtual].cor != rei.cor){ return false; }
+
+    const direcoesCavalo = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
+    for (const [linha, coluna] of direcoesCavalo) {
+        const linhaAtual = fimLinha + linha;
+        const colunaAtual = fimColuna + coluna;
+        if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+        if (tabuleiro[linhaAtual][colunaAtual] !== null && tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" && tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) { return false; }
     }
- 
-    if(rei.cor === "branco"){
-        if(tabuleiro[fimLinha-1][fimColuna-1] && tabuleiro[fimLinha-1][fimColuna-1].tipo === "peao" && tabuleiro[fimLinha-1][fimColuna-1].cor === "preto" ||
-            (tabuleiro[fimLinha-1][fimColuna+1] && tabuleiro[fimLinha-1][fimColuna+1].tipo === "peao" && tabuleiro[fimLinha-1][fimColuna+1].cor === "preto")
-        ){
+
+    if (rei.cor === "branco") {
+        if (tabuleiro[fimLinha - 1][fimColuna - 1] && tabuleiro[fimLinha - 1][fimColuna - 1].tipo === "peao" && tabuleiro[fimLinha - 1][fimColuna - 1].cor === "preto" ||
+            (tabuleiro[fimLinha - 1][fimColuna + 1] && tabuleiro[fimLinha - 1][fimColuna + 1].tipo === "peao" && tabuleiro[fimLinha - 1][fimColuna + 1].cor === "preto")
+        ) {
             return false;
         }
-    }else if(rei.cor === "preto"){
-        if(tabuleiro[fimLinha+1][fimColuna-1] && tabuleiro[fimLinha+1][fimColuna-1].tipo === "peao" && tabuleiro[fimLinha+1][fimColuna-1].cor === "branco" ||
-            (tabuleiro[fimLinha+1][fimColuna+1] && tabuleiro[fimLinha+1][fimColuna+1].tipo === "peao" && tabuleiro[fimLinha+1][fimColuna+1].cor === "branco")
-        ){
+    } else if (rei.cor === "preto") {
+        if (tabuleiro[fimLinha + 1][fimColuna - 1] && tabuleiro[fimLinha + 1][fimColuna - 1].tipo === "peao" && tabuleiro[fimLinha + 1][fimColuna - 1].cor === "branco" ||
+            (tabuleiro[fimLinha + 1][fimColuna + 1] && tabuleiro[fimLinha + 1][fimColuna + 1].tipo === "peao" && tabuleiro[fimLinha + 1][fimColuna + 1].cor === "branco")
+        ) {
             return false;
         }
     }
-        
-    
+
+
     if (diffLinha > 1 || diffColuna > 1) {
+        return false;
+    }
+    return true;
+}
+
+export function checkValidation(tabuleiro, id) {
+    let comecoLinha = 0;
+    let comecoColuna = 0;
+
+    console.log(id)
+
+    for(let i = 0; i < 8; i++){
+        for(let j = 0; j < 8; j++){
+            if(tabuleiro[i][j] && tabuleiro[i][j].tipo === "rei" && tabuleiro[i][j].cor === id){
+                comecoLinha = i;
+                comecoColuna = j;
+            }
+        }
+    }
+
+    const rei = tabuleiro[comecoLinha][comecoColuna];
+
+    const direcoes = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
+    for (const [linha, coluna] of direcoes) {
+        for (let i = 1; i < tabuleiro.length; i++) {
+            const linhaAtual = comecoLinha + (linha * i);
+            const colunaAtual = comecoColuna + (coluna * i);
+
+
+            if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+            if (tabuleiro[linhaAtual][colunaAtual] != null) {
+                const destino = tabuleiro[linhaAtual][colunaAtual];
+
+                if (rei.cor === destino.cor) { break; }
+
+                if (destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei") { break; }
+
+                if (Math.abs(linhaAtual - comecoLinha) === Math.abs(colunaAtual - comecoColuna) &&
+                    (destino.tipo === "dama" || destino.tipo === "bispo")) {
+                    console.log("sadasdasd | " + linhaAtual + "|" + colunaAtual)
+                    return false;
+                } else if (
+                    (destino.tipo === "dama" || destino.tipo === "torre")) {
+                        console.log("poweproiwed | " + linhaAtual + "|" + colunaAtual)
+                    return false;
+                }
+
+            }
+        }
+    }
+
+    const direcoesCavalo = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
+    for (const [linha, coluna] of direcoesCavalo) {
+        const linhaAtual = comecoLinha + linha;
+        const colunaAtual = comecoColuna + coluna;
+        if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+        if (tabuleiro[linhaAtual][colunaAtual] !== null && tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" && tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) { return false; }
+    }
+
+    if (rei.cor === "branco") {
+        if (tabuleiro[comecoLinha - 1][comecoColuna - 1] && tabuleiro[comecoLinha - 1][comecoColuna - 1].tipo === "peao" && tabuleiro[comecoLinha - 1][comecoColuna - 1].cor === "preto" ||
+            (tabuleiro[comecoLinha - 1][comecoColuna + 1] && tabuleiro[comecoLinha - 1][comecoColuna + 1].tipo === "peao" && tabuleiro[comecoLinha - 1][comecoColuna + 1].cor === "preto")
+        ) {
             return false;
         }
-        return true;
+    } else if (rei.cor === "preto") {
+        if (tabuleiro[comecoLinha + 1][comecoColuna - 1] && tabuleiro[comecoLinha + 1][comecoColuna - 1].tipo === "peao" && tabuleiro[comecoLinha + 1][comecoColuna - 1].cor === "branco" ||
+            (tabuleiro[comecoLinha + 1][comecoColuna + 1] && tabuleiro[comecoLinha + 1][comecoColuna + 1].tipo === "peao" && tabuleiro[comecoLinha + 1][comecoColuna + 1].cor === "branco")
+        ) {
+            return false;
+        }
     }
+
+    return true;
+
+}
