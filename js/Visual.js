@@ -1,253 +1,203 @@
-import { inicializarTabuleiro } from './Tabuleiro.js';
-import { movimentoValido } from "./Movimentos.js";
-import { checkValidation } from './Rei.js';
+export function validarRei(tabuleiro,
+    inicioLinha,
+    inicioColuna,
+    fimLinha,
+    fimColuna) {
+    let diffLinha = Math.abs(inicioLinha - fimLinha)
+    let diffColuna = Math.abs(inicioColuna - fimColuna)
+    const rei = tabuleiro[inicioLinha][inicioColuna]
 
-const dadosDoTabuleiro = inicializarTabuleiro();
+    if (diffLinha === 0 && (inicioColuna - fimColuna) === -2 && rei.moveu === false) {
 
-const tabuleiroHTML = document.getElementById("tabuleiro");
+        const torre = tabuleiro[inicioLinha][inicioColuna + 3]
 
-const botaoPecas = document.getElementById("trocar-pecas");
-
-const promocaoCSS = document.getElementById("promocao");
-
-const branco = "branco";
-const preto = "preto";
-let promocao = 0;
-let verificacaoCheque = preto;
-let turno = branco;
-
-let clique1 = null;
-
-let currentTheme = 'default';
-
-botaoPecas.addEventListener('click', () => {
-    currentTheme = (currentTheme === 'default') ? 'pixelart' : 'default';
-    if (currentTheme === 'pixelart') {
-        tabuleiroHTML.classList.add('pixelart');
-    } else {
-        tabuleiroHTML.classList.remove('pixelart');
-    }
-    atualizarTabuleiro();
-});
-
-function clique(linha, coluna, casa) {
-    if (clique1 === null) {
-        const peca = dadosDoTabuleiro[linha][coluna];
-        if (peca) {
-            if (peca.cor !== turno) {
-                return
-            }
-            clique1 = { linha, coluna, elemento: casa };
-            casa.classList.add("selecionada");
-
-        }
-    } else {
-        const destino = dadosDoTabuleiro[linha][coluna];
-        const peca = dadosDoTabuleiro[clique1.linha][clique1.coluna];
-
-        if (destino && peca.cor === destino.cor) {
-            clique1.elemento.classList.remove("selecionada");
-            clique1 = { linha, coluna, elemento: casa };
-            casa.classList.add("selecionada");
-            return;
-        }
-        if (
-            clique1.linha === linha &&
-            clique1.coluna === coluna
-        ) {
-            clique1.elemento.classList.remove("selecionada");
-            clique1 = null;
-            return;
-        }
-        tentarMover(clique1.linha, clique1.coluna, linha, coluna);
-
-        clique1.elemento.classList.remove("selecionada");
-        clique1 = null;
-    }
-
-}
-
-function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
-
-    const peca = dadosDoTabuleiro[inicioLinha][inicioColuna];
-    const destino = dadosDoTabuleiro[fimLinha][fimColuna];
-
-    if (promocao === 1) {
-        return
-    }
-
-    if (destino && destino.cor === peca.cor) {
-        return false;
-    }
-
-    if (!movimentoValido(dadosDoTabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)) {
-        return false;
-    }
-
-    const copiaTabuleiro = dadosDoTabuleiro.map(linha => [...linha]);
-
-    copiaTabuleiro[fimLinha][fimColuna] = copiaTabuleiro[inicioLinha][inicioColuna];
-    copiaTabuleiro[inicioLinha][inicioColuna] = null;
-
-    if (!checkValidation(copiaTabuleiro, "branco", turno, "before")) {
-        return false;
-    } else if (!checkValidation(copiaTabuleiro, "preto", turno, "before")) {
-        return false;
-    }
-
-    if (Math.abs(fimColuna - inicioColuna) === 1 &&
-        ((fimLinha - inicioLinha === -1) || (fimLinha - inicioLinha === 1)) &&
-        dadosDoTabuleiro[inicioLinha][fimColuna] &&
-        dadosDoTabuleiro[inicioLinha][fimColuna].enPassant === true) {
-        peca.enPassant = false;
-        dadosDoTabuleiro[inicioLinha][fimColuna] = null;
-    }
-
-
-    if (peca.tipo === "rei" && Math.abs(inicioColuna - fimColuna) === 2) {
-
-        if (fimColuna < inicioColuna) {
-            const torre = dadosDoTabuleiro[inicioLinha][0];
-            dadosDoTabuleiro[inicioLinha][3] = torre;
-            dadosDoTabuleiro[inicioLinha][0] = null;
-            if (torre) torre.moveu = true;
-        }
-
-        else {
-            const torre = dadosDoTabuleiro[inicioLinha][7];
-            dadosDoTabuleiro[inicioLinha][5] = torre;
-            dadosDoTabuleiro[inicioLinha][7] = null;
-            if (torre) torre.moveu = true;
-        }
-    }
-
-
-    if (peca.tipo === "peao" && (fimLinha === 0 || fimLinha === 7)) {
-        promocaoCSS.style.display = "flex";
-        promocao = 1
-
-        const botaoDama = document.getElementById("botao-dama");
-        const botaoTorre = document.getElementById("botao-torre");
-        const botaoBispo = document.getElementById("botao-bispo");
-        const botaoCavalo = document.getElementById("botao-cavalo");
-
-
-        botaoDama.addEventListener("click", () => {
-            promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, "dama")
-        });
-
-        botaoTorre.addEventListener("click", () => {
-            promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, "torre")
-        });
-
-        botaoBispo.addEventListener("click", () => {
-            promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, "bispo")
-        });
-
-        botaoCavalo.addEventListener("click", () => {
-            promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, "cavalo")
-        });
-    } else {
-        dadosDoTabuleiro[fimLinha][fimColuna] = peca;
-        dadosDoTabuleiro[inicioLinha][inicioColuna] = null;
-
-        for (let i = 0; i < 8; i++) {
-            for (let j = 0; j < 8; j++) {
-                if (dadosDoTabuleiro[i][j] && dadosDoTabuleiro[i][j].tipo === "rei" &&
-                    dadosDoTabuleiro[i][j].cor === turno) {
-                    const rei = dadosDoTabuleiro[i][j];
-                    rei.check = false;
-                }
-                if (dadosDoTabuleiro[i][j] && dadosDoTabuleiro[i][j].tipo === "peao" &&
-                    dadosDoTabuleiro[i][j].cor != turno) {
-                    const tirarPeao = dadosDoTabuleiro[i][j];
-                    tirarPeao.enPassant = false
-                }
-            }
-        }
-
-
-        if (checkValidation(copiaTabuleiro, verificacaoCheque, turno, "after") === false) {
-            let comecoLinha = 0;
-            let comecoColuna = 0;
-
-            for (let i = 0; i < 8; i++) {
-                for (let j = 0; j < 8; j++) {
-                    if (dadosDoTabuleiro[i][j] && dadosDoTabuleiro[i][j].tipo === "rei" && dadosDoTabuleiro[i][j].cor === verificacaoCheque) {
-                        comecoLinha = i;
-                        comecoColuna = j;
-                    }
-                }
-            }
-            const rei = dadosDoTabuleiro[comecoLinha][comecoColuna];
-            rei.check = true;
-        }
-        
-
-        peca.moveu = true;
-
-        verificacaoCheque === preto ? verificacaoCheque = branco : verificacaoCheque = preto;
-        turno === branco ? turno = preto : turno = branco;
-    }
-
-
-
-    atualizarTabuleiro();
-}
-
-function promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, id) {
-    dadosDoTabuleiro[fimLinha][fimColuna] = dadosDoTabuleiro[inicioLinha][inicioColuna]
-    dadosDoTabuleiro[fimLinha][fimColuna].tipo = id;
-    dadosDoTabuleiro[inicioLinha][inicioColuna] = null
-    atualizarTabuleiro();
-    promocaoCSS.style.display = "none";
-    promocao = 0;
-    turno === branco ? turno = preto : turno = branco;
-}
-
-function coisarTabuleiro() {
-    for (let linha = 0; linha < 8; linha++) {
-
-        for (let coluna = 0; coluna < 8; coluna++) {
-
-            const peca = dadosDoTabuleiro[linha][coluna];
-
-            const casa = document.createElement("div");
-            casa.addEventListener("click", () => {
-                clique(linha, coluna, casa);
-            });
-
-            if (peca) {
-                casa.classList.add("peca")
-                casa.classList.add(peca.tipo)
-                casa.classList.add(peca.cor)
-                casa.classList.add(currentTheme);
-                if (peca.check) {
-                    casa.classList.add("xeque")
-                }
-            }
-
-            casa.dataset.linha = linha;
-            casa.dataset.coluna = coluna;
-
-            if ((linha + coluna) % 2 === 0) {
-                casa.classList.add("casabranca");
+        if (torre.moveu === false) {
+            if (tabuleiro[inicioLinha][5] || tabuleiro[inicioLinha][6]) {
+                return false;
             } else {
-                casa.classList.add("casapreta");
-            }
-            if (currentTheme === "pixelart") {
-                casa.classList.add("pixelart")
+                return true;
             }
 
-            tabuleiroHTML.appendChild(casa);
+        } else {
+            return false;
+        }
+
+    } else if (diffLinha === 0 && (inicioColuna - fimColuna) === 2) {
+
+        const torre = tabuleiro[inicioLinha][inicioColuna - 4]
+
+        if (torre.moveu === false) {
+            if (tabuleiro[inicioLinha][3] || tabuleiro[inicioLinha][2] || tabuleiro[inicioLinha][1]) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
         }
     }
+    const direcoes = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
+    for (const [linha, coluna] of direcoes) {
+        for (let i = 1; i < tabuleiro.length; i++) {
+            const linhaAtual = fimLinha + (linha * i);
+            const colunaAtual = fimColuna + (coluna * i);
+
+
+            if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+            if (tabuleiro[linhaAtual][colunaAtual] != null) {
+                const destino = tabuleiro[linhaAtual][colunaAtual];
+
+                if (rei.cor === destino.cor) { break; }
+
+                if (destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei") { break; }
+
+                if (Math.abs(linhaAtual - fimLinha) === Math.abs(colunaAtual - fimColuna) &&
+                    (destino.tipo === "dama" || destino.tipo === "bispo")) {
+                    console.log("sadasdasd | " + linhaAtual + "|" + colunaAtual)
+                    return false;
+                } else if (
+                    (destino.tipo === "dama" || destino.tipo === "torre")) {
+                    console.log("poweproiwed | " + linhaAtual + "|" + colunaAtual)
+                    return false;
+                }
+            }
+        }
+    }
+
+    const direcoesCavalo = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
+    for (const [linha, coluna] of direcoesCavalo) {
+        const linhaAtual = fimLinha + linha;
+        const colunaAtual = fimColuna + coluna;
+        if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+        if (tabuleiro[linhaAtual][colunaAtual] !== null && tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" && tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) { return false; }
+    }
+
+    if (rei.cor === "branco") {
+        if (tabuleiro[fimLinha - 1][fimColuna - 1] && tabuleiro[fimLinha - 1][fimColuna - 1].tipo === "peao" && tabuleiro[fimLinha - 1][fimColuna - 1].cor === "preto" ||
+            (tabuleiro[fimLinha - 1][fimColuna + 1] && tabuleiro[fimLinha - 1][fimColuna + 1].tipo === "peao" && tabuleiro[fimLinha - 1][fimColuna + 1].cor === "preto")
+        ) {
+            return false;
+        }
+    } else if (rei.cor === "preto") {
+        if (tabuleiro[fimLinha + 1][fimColuna - 1] && tabuleiro[fimLinha + 1][fimColuna - 1].tipo === "peao" && tabuleiro[fimLinha + 1][fimColuna - 1].cor === "branco" ||
+            (tabuleiro[fimLinha + 1][fimColuna + 1] && tabuleiro[fimLinha + 1][fimColuna + 1].tipo === "peao" && tabuleiro[fimLinha + 1][fimColuna + 1].cor === "branco")
+        ) {
+            return false;
+        }
+    }
+
+
+    if (diffLinha > 1 || diffColuna > 1) {
+        return false;
+    }
+    return true;
 }
-function atualizarTabuleiro() {
-    tabuleiroHTML.innerHTML = "";
-    coisarTabuleiro();
+
+export function checkValidation(tabuleiro, id, turno, when) {
+    let comecoLinha = 0;
+    let comecoColuna = 0;
+
+    console.log(id)
+
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (tabuleiro[i][j] && tabuleiro[i][j].tipo === "rei" && tabuleiro[i][j].cor === id) {
+                comecoLinha = i;
+                comecoColuna = j;
+            }
+        }
+    }
+
+    const rei = tabuleiro[comecoLinha][comecoColuna];
+
+    const direcoes = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
+    for (const [linha, coluna] of direcoes) {
+        for (let i = 1; i < tabuleiro.length; i++) {
+            const linhaAtual = comecoLinha + (linha * i);
+            const colunaAtual = comecoColuna + (coluna * i);
+
+
+            if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+            if (tabuleiro[linhaAtual][colunaAtual] != null) {
+                const destino = tabuleiro[linhaAtual][colunaAtual];
+
+                if (rei.cor === destino.cor) { break; }
+
+                if (destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei") { break; }
+
+                if (Math.abs(linhaAtual - comecoLinha) === Math.abs(colunaAtual - comecoColuna) &&
+                    (destino.tipo === "dama" || destino.tipo === "bispo")) {
+                    if (turno === id && when === "before") {
+                        return false;
+                    } else if (turno != id && when === "after") {
+                        return false;
+                    }
+                } else if (Math.abs(linhaAtual - comecoLinha) === Math.abs(colunaAtual - comecoColuna) &&
+                    (destino.tipo === "torre")) {
+                    break;
+                } else if (linha === 0 || coluna === 0 &&
+                    (destino.tipo === "dama" || destino.tipo === "torre")) {
+                    if (turno === id) {
+                        return false;
+                    } else if (turno != id && when === "after") {
+                        return false;
+                    }
+                } else if (linha === 0 || coluna === 0 &&
+                    (destino.tipo === "bispo")) {
+                    break;
+                }
+                {
+
+                }
+
+            }
+        }
+    }
+
+    const direcoesCavalo = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
+    for (const [linha, coluna] of direcoesCavalo) {
+        const linhaAtual = comecoLinha + linha;
+        const colunaAtual = comecoColuna + coluna;
+        if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+        if (tabuleiro[linhaAtual][colunaAtual] !== null &&
+            tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" &&
+            tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) {
+                
+            if (turno === id && when === "before") {
+                
+                return false;
+            } else if (turno != id && when === "after") {
+                return false;
+            }
+        }
+    }
+
+    if (rei.cor === "branco") {
+        if (tabuleiro[comecoLinha - 1][comecoColuna - 1] && tabuleiro[comecoLinha - 1][comecoColuna - 1].tipo === "peao" && tabuleiro[comecoLinha - 1][comecoColuna - 1].cor === "preto" ||
+            (tabuleiro[comecoLinha - 1][comecoColuna + 1] && tabuleiro[comecoLinha - 1][comecoColuna + 1].tipo === "peao" && tabuleiro[comecoLinha - 1][comecoColuna + 1].cor === "preto")
+        ) {
+            if (turno === id && when === "before") {
+                return false;
+            } else if (turno != id && when === "after") {
+                return false;
+            }
+        }
+    } else if (rei.cor === "preto") {
+        if (tabuleiro[comecoLinha + 1][comecoColuna - 1] && tabuleiro[comecoLinha + 1][comecoColuna - 1].tipo === "peao" && tabuleiro[comecoLinha + 1][comecoColuna - 1].cor === "branco" ||
+            (tabuleiro[comecoLinha + 1][comecoColuna + 1] && tabuleiro[comecoLinha + 1][comecoColuna + 1].tipo === "peao" && tabuleiro[comecoLinha + 1][comecoColuna + 1].cor === "branco")
+        ) {
+            if (turno === id && when === "before") {
+                return false;
+            } else if (turno != id && when === "after") {
+                return false;
+            }
+        }
+    }
+
+    return true;
+
 }
-
-
-
-coisarTabuleiro();
