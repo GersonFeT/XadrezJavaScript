@@ -130,19 +130,27 @@ export function checkValidation(tabuleiro, id, turno, when) {
 
                 if (Math.abs(linhaAtual - comecoLinha) === Math.abs(colunaAtual - comecoColuna) &&
                     (destino.tipo === "dama" || destino.tipo === "bispo")) {
-                    if (turno ===  id && when === "before") {
+                    if (turno === id && when === "before") {
                         return false;
-                    } else if(turno != id && when === "after"){
+                    } else if (turno != id && when === "after") {
                         return false;
                     }
-
-                } else if (
+                } else if (Math.abs(linhaAtual - comecoLinha) === Math.abs(colunaAtual - comecoColuna) &&
+                    (destino.tipo === "torre")) {
+                        break;
+                } else if (linha === 0 || coluna === 0 && 
                     (destino.tipo === "dama" || destino.tipo === "torre")) {
                     if (turno === id) {
                         return false;
-                    } else {
-                        return true;
+                    } else if (turno != id && when === "after") {
+                        return false;
                     }
+                } else if (linha === 0 || coluna === 0 &&
+                        (destino.tipo === "bispo")){
+                            break;
+                        }
+                {
+
                 }
 
             }
@@ -164,7 +172,7 @@ export function checkValidation(tabuleiro, id, turno, when) {
         ) {
             if (turno === id) {
                 return false;
-            } else {
+            } else if (turno != id && when === "after") {
                 return true;
             }
         }
@@ -174,7 +182,7 @@ export function checkValidation(tabuleiro, id, turno, when) {
         ) {
             if (turno === id) {
                 return false;
-            } else {
+            } else if (turno != id && when === "after") {
                 return true;
             }
         }
