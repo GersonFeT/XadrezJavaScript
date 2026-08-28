@@ -5,6 +5,7 @@
     --cor-casa-branca-default: #f0d9b5;
     --cor-casa-preta-default: #b58863;
     --cor-casa-selecionada: #ffff99;
+    --cor-casa-xeque: #ff0000;
     --cor-casa-branca-pixelart: #e0e8d0;
     --cor-casa-preta-pixelart: #709080;
 }
@@ -152,6 +153,10 @@ body {
     transition: transform 0.2s, border-color 0.2s;
 }
 
+.casabranca.xeque,
+.casapreta.xeque {
+    background-color: var(--cor-casa-xeque);
+}
 
 .casabranca.selecionada,
 .casapreta.selecionada {

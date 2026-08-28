@@ -16,10 +16,10 @@ export function validarPeao(tabuleiro,
 
     if (Math.abs(diffColuna) === 1 &&
         diffLinha === direcao &&
+        destino === null &&
         tabuleiro[inicioLinha][fimColuna] &&
         tabuleiro[inicioLinha][fimColuna].tipo === "peao" &&
-        peca.enPassant === true) {
-
+        tabuleiro[inicioLinha][fimColuna].enPassant === true) {
         return true;
     }
 
@@ -34,13 +34,11 @@ export function validarPeao(tabuleiro,
         !tabuleiro[inicioLinha + direcao][inicioColuna]) {
         if (tabuleiro[fimLinha][fimColuna + 1] && tabuleiro[fimLinha][fimColuna + 1].tipo === "peao" &&
             peca.cor != (tabuleiro[fimLinha][fimColuna + 1].cor)) {
-            const peaoEnPassant = tabuleiro[fimLinha][fimColuna + 1];
-            peaoEnPassant.enPassant = true;
+            peca.enPassant = true;
         } else if (tabuleiro[fimLinha][fimColuna - 1] && tabuleiro[fimLinha][fimColuna - 1].tipo === "peao" &&
             tabuleiro[fimLinha][fimColuna - 1].cor
         ) {
-            const peaoEnPassant = tabuleiro[fimLinha][fimColuna - 1];
-            peaoEnPassant.enPassant = true;
+            peca.enPassant = true;
         }
         return true;
     }

@@ -1,5 +1,5 @@
 export function criarPeca(tipo, cor) {
-    return { tipo, cor, moveu: false, enPassant: false};
+    return { tipo, cor, moveu: false, enPassant: false, check: false};
 }
 
 export function inicializarTabuleiro() {

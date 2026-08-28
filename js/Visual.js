@@ -13,6 +13,7 @@ const promocaoCSS = document.getElementById("promocao");
 const branco = "branco";
 const preto = "preto";
 let promocao = 0;
+let verificacaoCheque = preto;
 let turno = branco;
 
 let clique1 = null;
@@ -71,7 +72,7 @@ function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
     const peca = dadosDoTabuleiro[inicioLinha][inicioColuna];
     const destino = dadosDoTabuleiro[fimLinha][fimColuna];
 
-    if (promocao === 1){
+    if (promocao === 1) {
         return
     }
 
@@ -88,24 +89,20 @@ function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
     copiaTabuleiro[fimLinha][fimColuna] = copiaTabuleiro[inicioLinha][inicioColuna];
     copiaTabuleiro[inicioLinha][inicioColuna] = null;
 
-    if(!checkValidation(copiaTabuleiro, "branco")){
+    if (!checkValidation(copiaTabuleiro, "branco", turno, "before")) {
         return false;
-    } else if(!checkValidation(copiaTabuleiro, "preto")){
+    } else if (!checkValidation(copiaTabuleiro, "preto", turno, "before")) {
         return false;
-    }
-
-
-    if (destino && destino.cor === peca.cor) {
-        return false
     }
 
     if (Math.abs(fimColuna - inicioColuna) === 1 &&
-        ((fimLinha - inicioLinha === -1) || (fimLinha - inicioLinha === 1))&&
-        peca.enPassant === true) {
+        ((fimLinha - inicioLinha === -1) || (fimLinha - inicioLinha === 1)) &&
+        dadosDoTabuleiro[inicioLinha][fimColuna] &&
+        dadosDoTabuleiro[inicioLinha][fimColuna].enPassant === true) {
         peca.enPassant = false;
         dadosDoTabuleiro[inicioLinha][fimColuna] = null;
-
     }
+
 
     if (peca.tipo === "rei" && Math.abs(inicioColuna - fimColuna) === 2) {
 
@@ -154,8 +151,42 @@ function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
         dadosDoTabuleiro[fimLinha][fimColuna] = peca;
         dadosDoTabuleiro[inicioLinha][inicioColuna] = null;
 
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if (dadosDoTabuleiro[i][j] && dadosDoTabuleiro[i][j].tipo === "rei" &&
+                    dadosDoTabuleiro[i][j].cor === turno) {
+                    const rei = dadosDoTabuleiro[i][j];
+                    rei.check = false;
+                }
+                if (dadosDoTabuleiro[i][j] && dadosDoTabuleiro[i][j].tipo === "peao" &&
+                    dadosDoTabuleiro[i][j].cor != turno) {
+                    const tirarPeao = dadosDoTabuleiro[i][j];
+                    tirarPeao.enPassant = false
+                }
+            }
+        }
+
+
+        if (checkValidation(copiaTabuleiro, verificacaoCheque, turno, "after") === false) {
+            let comecoLinha = 0;
+            let comecoColuna = 0;
+
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    if (dadosDoTabuleiro[i][j] && dadosDoTabuleiro[i][j].tipo === "rei" && dadosDoTabuleiro[i][j].cor === verificacaoCheque) {
+                        comecoLinha = i;
+                        comecoColuna = j;
+                    }
+                }
+            }
+            const rei = dadosDoTabuleiro[comecoLinha][comecoColuna];
+            rei.check = true;
+        }
+        
+
         peca.moveu = true;
 
+        verificacaoCheque === preto ? verificacaoCheque = branco : verificacaoCheque = preto;
         turno === branco ? turno = preto : turno = branco;
     }
 
@@ -191,6 +222,9 @@ function coisarTabuleiro() {
                 casa.classList.add(peca.tipo)
                 casa.classList.add(peca.cor)
                 casa.classList.add(currentTheme);
+                if (peca.check) {
+                    casa.classList.add("xeque")
+                }
             }
 
             casa.dataset.linha = linha;

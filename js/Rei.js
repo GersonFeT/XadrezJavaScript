@@ -58,7 +58,7 @@ export function validarRei(tabuleiro,
                     return false;
                 } else if (
                     (destino.tipo === "dama" || destino.tipo === "torre")) {
-                        console.log("poweproiwed | " + linhaAtual + "|" + colunaAtual)
+                    console.log("poweproiwed | " + linhaAtual + "|" + colunaAtual)
                     return false;
                 }
             }
@@ -95,15 +95,15 @@ export function validarRei(tabuleiro,
     return true;
 }
 
-export function checkValidation(tabuleiro, id) {
+export function checkValidation(tabuleiro, id, turno, when) {
     let comecoLinha = 0;
     let comecoColuna = 0;
 
     console.log(id)
 
-    for(let i = 0; i < 8; i++){
-        for(let j = 0; j < 8; j++){
-            if(tabuleiro[i][j] && tabuleiro[i][j].tipo === "rei" && tabuleiro[i][j].cor === id){
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (tabuleiro[i][j] && tabuleiro[i][j].tipo === "rei" && tabuleiro[i][j].cor === id) {
                 comecoLinha = i;
                 comecoColuna = j;
             }
@@ -130,12 +130,19 @@ export function checkValidation(tabuleiro, id) {
 
                 if (Math.abs(linhaAtual - comecoLinha) === Math.abs(colunaAtual - comecoColuna) &&
                     (destino.tipo === "dama" || destino.tipo === "bispo")) {
-                    console.log("sadasdasd | " + linhaAtual + "|" + colunaAtual)
-                    return false;
+                    if (turno ===  id && when === "before") {
+                        return false;
+                    } else if(turno != id && when === "after"){
+                        return false;
+                    }
+
                 } else if (
                     (destino.tipo === "dama" || destino.tipo === "torre")) {
-                        console.log("poweproiwed | " + linhaAtual + "|" + colunaAtual)
-                    return false;
+                    if (turno === id) {
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
 
             }
@@ -155,13 +162,21 @@ export function checkValidation(tabuleiro, id) {
         if (tabuleiro[comecoLinha - 1][comecoColuna - 1] && tabuleiro[comecoLinha - 1][comecoColuna - 1].tipo === "peao" && tabuleiro[comecoLinha - 1][comecoColuna - 1].cor === "preto" ||
             (tabuleiro[comecoLinha - 1][comecoColuna + 1] && tabuleiro[comecoLinha - 1][comecoColuna + 1].tipo === "peao" && tabuleiro[comecoLinha - 1][comecoColuna + 1].cor === "preto")
         ) {
-            return false;
+            if (turno === id) {
+                return false;
+            } else {
+                return true;
+            }
         }
     } else if (rei.cor === "preto") {
         if (tabuleiro[comecoLinha + 1][comecoColuna - 1] && tabuleiro[comecoLinha + 1][comecoColuna - 1].tipo === "peao" && tabuleiro[comecoLinha + 1][comecoColuna - 1].cor === "branco" ||
             (tabuleiro[comecoLinha + 1][comecoColuna + 1] && tabuleiro[comecoLinha + 1][comecoColuna + 1].tipo === "peao" && tabuleiro[comecoLinha + 1][comecoColuna + 1].cor === "branco")
         ) {
-            return false;
+            if (turno === id) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
