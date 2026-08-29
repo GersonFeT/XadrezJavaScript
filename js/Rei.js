@@ -137,8 +137,8 @@ export function checkValidation(tabuleiro, id, turno, when) {
                     }
                 } else if (Math.abs(linhaAtual - comecoLinha) === Math.abs(colunaAtual - comecoColuna) &&
                     (destino.tipo === "torre")) {
-                        break;
-                } else if (linha === 0 || coluna === 0 && 
+                    break;
+                } else if (linha === 0 || coluna === 0 &&
                     (destino.tipo === "dama" || destino.tipo === "torre")) {
                     if (turno === id) {
                         return false;
@@ -146,9 +146,9 @@ export function checkValidation(tabuleiro, id, turno, when) {
                         return false;
                     }
                 } else if (linha === 0 || coluna === 0 &&
-                        (destino.tipo === "bispo")){
-                            break;
-                        }
+                    (destino.tipo === "bispo")) {
+                    break;
+                }
                 {
 
                 }
@@ -163,27 +163,37 @@ export function checkValidation(tabuleiro, id, turno, when) {
         const colunaAtual = comecoColuna + coluna;
         if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
 
-        if (tabuleiro[linhaAtual][colunaAtual] !== null && tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" && tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) { return false; }
+        if (tabuleiro[linhaAtual][colunaAtual] !== null &&
+            tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" &&
+            tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) {
+                
+            if (turno === id && when === "before") {
+                
+                return false;
+            } else if (turno != id && when === "after") {
+                return false;
+            }
+        }
     }
 
     if (rei.cor === "branco") {
         if (tabuleiro[comecoLinha - 1][comecoColuna - 1] && tabuleiro[comecoLinha - 1][comecoColuna - 1].tipo === "peao" && tabuleiro[comecoLinha - 1][comecoColuna - 1].cor === "preto" ||
             (tabuleiro[comecoLinha - 1][comecoColuna + 1] && tabuleiro[comecoLinha - 1][comecoColuna + 1].tipo === "peao" && tabuleiro[comecoLinha - 1][comecoColuna + 1].cor === "preto")
         ) {
-            if (turno === id) {
+            if (turno === id && when === "before") {
                 return false;
             } else if (turno != id && when === "after") {
-                return true;
+                return false;
             }
         }
     } else if (rei.cor === "preto") {
         if (tabuleiro[comecoLinha + 1][comecoColuna - 1] && tabuleiro[comecoLinha + 1][comecoColuna - 1].tipo === "peao" && tabuleiro[comecoLinha + 1][comecoColuna - 1].cor === "branco" ||
             (tabuleiro[comecoLinha + 1][comecoColuna + 1] && tabuleiro[comecoLinha + 1][comecoColuna + 1].tipo === "peao" && tabuleiro[comecoLinha + 1][comecoColuna + 1].cor === "branco")
         ) {
-            if (turno === id) {
+            if (turno === id && when === "before") {
                 return false;
             } else if (turno != id && when === "after") {
-                return true;
+                return false;
             }
         }
     }
