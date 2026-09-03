@@ -1,6 +1,7 @@
 import { inicializarTabuleiro } from './Tabuleiro.js';
 import { movimentoValido } from "./Movimentos.js";
 import { checkValidation } from './Rei.js';
+import { engineConversion, getEngineMovement, myCodeConversion } from './StockfishConnection.js';
 
 const dadosDoTabuleiro = inicializarTabuleiro();
 
@@ -15,6 +16,8 @@ const preto = "preto";
 let promocao = 0;
 let verificacaoCheque = preto;
 let turno = branco;
+const historicoEngine = [];
+let stockfishTurn = false
 
 let clique1 = null;
 
@@ -31,6 +34,8 @@ botaoPecas.addEventListener('click', () => {
 });
 
 function clique(linha, coluna, casa) {
+    if (stockfishTurn === true) { return; }
+
     if (clique1 === null) {
         const peca = dadosDoTabuleiro[linha][coluna];
         if (peca) {
@@ -59,7 +64,11 @@ function clique(linha, coluna, casa) {
             clique1 = null;
             return;
         }
-        tentarMover(clique1.linha, clique1.coluna, linha, coluna);
+        const Moveu = tentarMover(clique1.linha, clique1.coluna, linha, coluna);
+
+        if (Moveu) {
+            setTimeout(engineMoveExecution, 250);
+        }
 
         clique1.elemento.classList.remove("selecionada");
         clique1 = null;
@@ -148,6 +157,11 @@ function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
             promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, "cavalo")
         });
     } else {
+
+        const inicioEngine = engineConversion(inicioLinha, inicioColuna);
+        const fimEngine = engineConversion(fimLinha, fimColuna);
+        historicoEngine.push(inicioEngine + fimEngine);
+
         dadosDoTabuleiro[fimLinha][fimColuna] = peca;
         dadosDoTabuleiro[inicioLinha][inicioColuna] = null;
 
@@ -174,6 +188,7 @@ function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
             for (let i = 0; i < 8; i++) {
                 for (let j = 0; j < 8; j++) {
                     if (dadosDoTabuleiro[i][j] && dadosDoTabuleiro[i][j].tipo === "rei" && dadosDoTabuleiro[i][j].cor === verificacaoCheque) {
+
                         comecoLinha = i;
                         comecoColuna = j;
                     }
@@ -182,17 +197,20 @@ function tentarMover(inicioLinha, inicioColuna, fimLinha, fimColuna) {
             const rei = dadosDoTabuleiro[comecoLinha][comecoColuna];
             rei.check = true;
         }
-        
+
 
         peca.moveu = true;
 
         verificacaoCheque === preto ? verificacaoCheque = branco : verificacaoCheque = preto;
         turno === branco ? turno = preto : turno = branco;
+        stockfishTurn === false ? stockfishTurn = true : stockfishTurn = false;
     }
 
 
 
     atualizarTabuleiro();
+
+    return true;
 }
 
 function promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, id) {
@@ -202,7 +220,41 @@ function promocaoPeca(inicioLinha, inicioColuna, fimLinha, fimColuna, id) {
     atualizarTabuleiro();
     promocaoCSS.style.display = "none";
     promocao = 0;
+
+    if (checkValidation(dadosDoTabuleiro, verificacaoCheque, turno, "after") === false) {
+        let comecoLinha = 0;
+        let comecoColuna = 0;
+
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if (dadosDoTabuleiro[i][j] && dadosDoTabuleiro[i][j].tipo === "rei" && dadosDoTabuleiro[i][j].cor === verificacaoCheque) {
+                    comecoLinha = i;
+                    comecoColuna = j;
+                }
+            }
+        }
+        const rei = dadosDoTabuleiro[comecoLinha][comecoColuna];
+        rei.check = true;
+    }
+
     turno === branco ? turno = preto : turno = branco;
+
+    atualizarTabuleiro();
+}
+
+function engineMoveExecution(){
+    getEngineMovement(historicoEngine, (EngineMovement) => {
+        if (!EngineMovement) return;
+
+        const inicioStrEngine = EngineMovement.substring(0, 2);
+        const fimStrEngine = EngineMovement.substring(2, 4);
+
+        const inicio = myCodeConversion(inicioStrEngine);
+        const fim = myCodeConversion(fimStrEngine);
+
+        
+        tentarMover(inicio.linha, inicio.coluna, fim.linha, fim.coluna);
+    });
 }
 
 function coisarTabuleiro() {
