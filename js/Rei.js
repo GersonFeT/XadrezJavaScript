@@ -36,57 +36,6 @@ export function validarRei(tabuleiro,
             return false;
         }
     }
-    const direcoes = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
-    for (const [linha, coluna] of direcoes) {
-        for (let i = 1; i < tabuleiro.length; i++) {
-            const linhaAtual = fimLinha + (linha * i);
-            const colunaAtual = fimColuna + (coluna * i);
-
-
-            if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
-
-            if (tabuleiro[linhaAtual][colunaAtual] != null) {
-                const destino = tabuleiro[linhaAtual][colunaAtual];
-
-                if (rei.cor === destino.cor) { break; }
-
-                if (destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei") { break; }
-
-                if (Math.abs(linhaAtual - fimLinha) === Math.abs(colunaAtual - fimColuna) &&
-                    (destino.tipo === "dama" || destino.tipo === "bispo")) {
-                    console.log("sadasdasd | " + linhaAtual + "|" + colunaAtual)
-                    return false;
-                } else if (
-                    (destino.tipo === "dama" || destino.tipo === "torre")) {
-                    console.log("poweproiwed | " + linhaAtual + "|" + colunaAtual)
-                    return false;
-                }
-            }
-        }
-    }
-
-    const direcoesCavalo = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
-    for (const [linha, coluna] of direcoesCavalo) {
-        const linhaAtual = fimLinha + linha;
-        const colunaAtual = fimColuna + coluna;
-        if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
-
-        if (tabuleiro[linhaAtual][colunaAtual] !== null && tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" && tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) { return false; }
-    }
-
-    if (rei.cor === "branco") {
-        if (tabuleiro[fimLinha - 1][fimColuna - 1] && tabuleiro[fimLinha - 1][fimColuna - 1].tipo === "peao" && tabuleiro[fimLinha - 1][fimColuna - 1].cor === "preto" ||
-            (tabuleiro[fimLinha - 1][fimColuna + 1] && tabuleiro[fimLinha - 1][fimColuna + 1].tipo === "peao" && tabuleiro[fimLinha - 1][fimColuna + 1].cor === "preto")
-        ) {
-            return false;
-        }
-    } else if (rei.cor === "preto") {
-        if (tabuleiro[fimLinha + 1][fimColuna - 1] && tabuleiro[fimLinha + 1][fimColuna - 1].tipo === "peao" && tabuleiro[fimLinha + 1][fimColuna - 1].cor === "branco" ||
-            (tabuleiro[fimLinha + 1][fimColuna + 1] && tabuleiro[fimLinha + 1][fimColuna + 1].tipo === "peao" && tabuleiro[fimLinha + 1][fimColuna + 1].cor === "branco")
-        ) {
-            return false;
-        }
-    }
 
 
     if (diffLinha > 1 || diffColuna > 1) {
