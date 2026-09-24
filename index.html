@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <title>Xadrez</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div id="all-content">
-  <div id="promocao" >
-    <button class="opcao-promocao peca dama branco default" id="botao-dama"></button>
-    <button class="opcao-promocao peca torre branco default" id="botao-torre"></button>
-    <button class="opcao-promocao peca bispo branco default" id="botao-bispo"></button>
-    <button class="opcao-promocao peca cavalo branco default" id="botao-cavalo"></button>
+  <div id="all-content">
+    <div id="promocao">
+      <button class="opcao-promocao peca dama branco default" id="botao-dama"></button>
+      <button class="opcao-promocao peca torre branco default" id="botao-torre"></button>
+      <button class="opcao-promocao peca bispo branco default" id="botao-bispo"></button>
+      <button class="opcao-promocao peca cavalo branco default" id="botao-cavalo"></button>
+    </div>
+    <div id="tabuleiro"></div>
   </div>
-  <div id="tabuleiro"></div></div>
-  <button id="trocar-pecas">Trocar estilo das peças</button>
-</div>
+  <button id="btn-menu" class="btn">⇾</button>
+  <div id="menu">
+    <button id="trocar-pecas" class="btn">Trocar estilo das peças</button>
+  </div>
 
-<script type="module" src="js/visual.js"></script>
+  </div>
+
+  <script type="module" src="js/visual.js"></script>
 </body>
+
 </html>

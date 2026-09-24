@@ -1,6 +1,6 @@
 :root{
-    --cor-fundo: #222;
-    --cor-borda-tabuleiro: white;
+    --cor-fundo: #182026;
+    --cor-borda-tabuleiro: #8B6538;
     --cor-botao: #333333;
     --cor-casa-branca-default: #f0d9b5;
     --cor-casa-preta-default: #b58863;
@@ -8,9 +8,12 @@
     --cor-casa-xeque: #ff0000;
     --cor-casa-branca-pixelart: #e0e8d0;
     --cor-casa-preta-pixelart: #709080;
+    --cor-borda-tabuleiro-pixelart: #3E4C59;
 }
 
-
+#tabuleiro.pixelart{
+    border: 5px solid var(--cor-borda-tabuleiro-pixelart);
+}
 body {
     display: flex;
     justify-content: center;
@@ -34,6 +37,27 @@ body {
 }
 
 
+.btn{
+    background-color: var(--cor-botao);
+    min-height: 15px;
+    
+
+    color: var(--cor-borda-tabuleiro);
+    border-radius: 0.7px;
+    border: 1px solid #404040;
+    
+    cursor: pointer;
+}
+
+#btn-menu{
+    height: 20%;
+    width: 1.5%;
+    
+}
+
+#menu{
+    display: none;
+}
 
 #trocar-pecas{
     background-color: var(--cor-botao);
@@ -41,8 +65,8 @@ body {
     max-height: 30px;
 
     color: var(--cor-borda-tabuleiro);
-    border-radius: 12px;
-    border: 2px solid #404040;
+    border-radius: 0.7px;
+    border: 1px solid #404040;
     
     cursor: pointer;
     

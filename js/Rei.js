@@ -48,7 +48,6 @@ export function checkValidation(tabuleiro, id, turno, when) {
     let comecoLinha = 0;
     let comecoColuna = 0;
 
-    console.log(id)
 
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
@@ -115,9 +114,9 @@ export function checkValidation(tabuleiro, id, turno, when) {
         if (tabuleiro[linhaAtual][colunaAtual] !== null &&
             tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" &&
             tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) {
-                
+
             if (turno === id && when === "before") {
-                
+
                 return false;
             } else if (turno != id && when === "after") {
                 return false;
@@ -149,4 +148,108 @@ export function checkValidation(tabuleiro, id, turno, when) {
 
     return true;
 
+}
+export function validarXequeMate(tabuleiro, cor) {
+    //vai receber quem está em xeque e mandar a outra cor    
+    //igual e antes
+    const copiaTabuleiro = tabuleiro.map(linha => [...linha]);
+    let direcaoXeque= 0;
+    const outraCor = cor === "branco" ? "preto" : "branco";
+
+    let comecoLinha = 0;
+    let comecoColuna = 0;
+    let reiOriginalLinha = 0;
+    let reiOriginalColuna = 0;
+
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (copiaTabuleiro[i][j] && copiaTabuleiro[i][j].tipo === "rei" && copiaTabuleiro[i][j].cor === outraCor) {
+                comecoLinha = i;
+                comecoColuna = j;
+            }
+        }
+    }
+
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (copiaTabuleiro[i][j] && copiaTabuleiro[i][j].tipo === "rei" && copiaTabuleiro[i][j].cor === cor) {
+                reiOriginalLinha = i;
+                reiOriginalColuna = j;
+            }
+        }
+    }
+
+    const rei = copiaTabuleiro[reiOriginalLinha][reiOriginalColuna];
+    aLinha = 0;
+    aColuna = 0;
+
+    const direcoes = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
+    for (const [linha, coluna] of direcoes) {
+        for (let i = 1; i < tabuleiro.length; i++) {
+            const linhaAtual = aLinha + (linha * i);
+            const colunaAtual = aColuna + (coluna * i);
+
+
+            if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+            if (tabuleiro[linhaAtual][colunaAtual] != null) {
+                const destino = tabuleiro[linhaAtual][colunaAtual];
+
+                if (rei.cor === destino.cor) { break; }
+
+                if (destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei") { break; }
+
+                if (Math.abs(linhaAtual - aLinha) === Math.abs(colunaAtual - aColuna) &&
+                    (destino.tipo === "dama" || destino.tipo === "bispo")) {
+                    direcaoXeque = "diagonal"
+                } else if (Math.abs(linhaAtual - aLinha) === Math.abs(colunaAtual - aColuna) &&
+                    (destino.tipo === "torre")) {
+                    break;
+                } else if (linha === 0 || coluna === 0 &&
+                    (destino.tipo === "dama" || destino.tipo === "torre")) {
+                    direcaoXeque = linha === 0? "linha":"coluna";
+                } else if (linha === 0 || coluna === 0 &&
+                    (destino.tipo === "bispo")) {
+                    break;
+                }
+                {
+
+                }
+
+            }
+        }
+    }
+
+    const direcoesCavalo = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
+    for (const [linha, coluna] of direcoesCavalo) {
+        const linhaAtual = aLinha + linha;
+        const colunaAtual = aColuna + coluna;
+        if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+
+        if (tabuleiro[linhaAtual][colunaAtual] !== null &&
+            tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" &&
+            tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) {
+            
+            direcaoXeque = "cavalo";
+        }
+    }
+
+    if (rei.cor === "branco") {
+        if (tabuleiro[aLinha - 1][aColuna - 1] && tabuleiro[aLinha - 1][aColuna - 1].tipo === "peao" && tabuleiro[aLinha - 1][aColuna - 1].cor === "preto" ||
+            (tabuleiro[aLinha - 1][aColuna + 1] && tabuleiro[aLinha - 1][aColuna + 1].tipo === "peao" && tabuleiro[aLinha - 1][aColuna + 1].cor === "preto")
+        ) {
+            direcaoXeque = "peao"
+        }
+    } else if (rei.cor === "preto") {
+        if (tabuleiro[aLinha + 1][aColuna - 1] && tabuleiro[aLinha + 1][aColuna - 1].tipo === "peao" && tabuleiro[aLinha + 1][aColuna - 1].cor === "branco" ||
+            (tabuleiro[aLinha + 1][aColuna + 1] && tabuleiro[aLinha + 1][aColuna + 1].tipo === "peao" && tabuleiro[aLinha + 1][aColuna + 1].cor === "branco")
+        ) {
+            direcaoXeque = "peao"
+        }
+    }
+
+    return true;
+
+
+    checkValidation(copiaTabuleiro, outraCor)
 }
