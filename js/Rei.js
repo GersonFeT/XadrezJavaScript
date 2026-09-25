@@ -1,3 +1,5 @@
+import { movimentoValido } from "./Movimentos.js";
+
 export function validarRei(tabuleiro,
     inicioLinha,
     inicioColuna,
@@ -86,7 +88,7 @@ export function checkValidation(tabuleiro, id, turno, when) {
                 } else if (Math.abs(linhaAtual - comecoLinha) === Math.abs(colunaAtual - comecoColuna) &&
                     (destino.tipo === "torre")) {
                     break;
-                } else if (linha === 0 || coluna === 0 &&
+                } else if ((linha === 0 || coluna === 0) &&
                     (destino.tipo === "dama" || destino.tipo === "torre")) {
                     if (turno === id) {
                         return false;
@@ -150,106 +152,66 @@ export function checkValidation(tabuleiro, id, turno, when) {
 
 }
 export function validarXequeMate(tabuleiro, cor) {
-    //vai receber quem está em xeque e mandar a outra cor    
-    //igual e antes
-    const copiaTabuleiro = tabuleiro.map(linha => [...linha]);
-    let direcaoXeque= 0;
-    const outraCor = cor === "branco" ? "preto" : "branco";
-
-    let comecoLinha = 0;
-    let comecoColuna = 0;
-    let reiOriginalLinha = 0;
-    let reiOriginalColuna = 0;
-
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-            if (copiaTabuleiro[i][j] && copiaTabuleiro[i][j].tipo === "rei" && copiaTabuleiro[i][j].cor === outraCor) {
-                comecoLinha = i;
-                comecoColuna = j;
-            }
-        }
+    // Se o rei não está em xeque, não existe xeque-mate.
+    if (checkValidation(tabuleiro, cor, cor, "before")) {
+        return false;
     }
 
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-            if (copiaTabuleiro[i][j] && copiaTabuleiro[i][j].tipo === "rei" && copiaTabuleiro[i][j].cor === cor) {
-                reiOriginalLinha = i;
-                reiOriginalColuna = j;
+    // Procura todas as peças da cor que está em xeque.
+    for (let inicioLinha = 0; inicioLinha < 8; inicioLinha++) {
+        for (let inicioColuna = 0; inicioColuna < 8; inicioColuna++) {
+
+            const peca = tabuleiro[inicioLinha][inicioColuna];
+
+            if (!peca || peca.cor !== cor) {
+                continue;
             }
-        }
-    }
 
-    const rei = copiaTabuleiro[reiOriginalLinha][reiOriginalColuna];
-    aLinha = 0;
-    aColuna = 0;
+            // Tenta todos os destinos possíveis dessa peça.
+            for (let fimLinha = 0; fimLinha < 8; fimLinha++) {
+                for (let fimColuna = 0; fimColuna < 8; fimColuna++) {
 
-    const direcoes = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
-    for (const [linha, coluna] of direcoes) {
-        for (let i = 1; i < tabuleiro.length; i++) {
-            const linhaAtual = aLinha + (linha * i);
-            const colunaAtual = aColuna + (coluna * i);
+                    const destino = tabuleiro[fimLinha][fimColuna];
 
+                    // Não pode capturar uma peça da mesma cor.
+                    if (destino && destino.cor === cor) {
+                        continue;
+                    }
 
-            if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
+                    // Usa a mesma validação de movimento do jogo.
+                    if (!movimentoValido(
+                        tabuleiro,
+                        inicioLinha,
+                        inicioColuna,
+                        fimLinha,
+                        fimColuna
+                    )) {
+                        continue;
+                    }
 
-            if (tabuleiro[linhaAtual][colunaAtual] != null) {
-                const destino = tabuleiro[linhaAtual][colunaAtual];
+                    // Cria uma cópia independente do tabuleiro.
+                    const copiaTabuleiro = tabuleiro.map(linha =>
+                        linha.map(peca =>
+                            peca ? { ...peca } : null
+                        )
+                    );
 
-                if (rei.cor === destino.cor) { break; }
+                    // Simula o movimento.
+                    copiaTabuleiro[fimLinha][fimColuna] =
+                        copiaTabuleiro[inicioLinha][inicioColuna];
 
-                if (destino.tipo === "peao" || destino.tipo === "cavalo" || destino.tipo === "rei") { break; }
+                    copiaTabuleiro[inicioLinha][inicioColuna] = null;
 
-                if (Math.abs(linhaAtual - aLinha) === Math.abs(colunaAtual - aColuna) &&
-                    (destino.tipo === "dama" || destino.tipo === "bispo")) {
-                    direcaoXeque = "diagonal"
-                } else if (Math.abs(linhaAtual - aLinha) === Math.abs(colunaAtual - aColuna) &&
-                    (destino.tipo === "torre")) {
-                    break;
-                } else if (linha === 0 || coluna === 0 &&
-                    (destino.tipo === "dama" || destino.tipo === "torre")) {
-                    direcaoXeque = linha === 0? "linha":"coluna";
-                } else if (linha === 0 || coluna === 0 &&
-                    (destino.tipo === "bispo")) {
-                    break;
+                    // Se depois do movimento o rei não estiver mais em xeque,
+                    // então existe uma jogada que salva o rei.
+                    if (checkValidation(copiaTabuleiro, cor, cor, "before")) {
+                        return false;
+                    }
                 }
-                {
-
-                }
-
             }
         }
     }
 
-    const direcoesCavalo = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
-    for (const [linha, coluna] of direcoesCavalo) {
-        const linhaAtual = aLinha + linha;
-        const colunaAtual = aColuna + coluna;
-        if (linhaAtual > 7 || linhaAtual < 0 || colunaAtual > 7 || colunaAtual < 0) { break; }
-
-        if (tabuleiro[linhaAtual][colunaAtual] !== null &&
-            tabuleiro[linhaAtual][colunaAtual].tipo === "cavalo" &&
-            tabuleiro[linhaAtual][colunaAtual].cor != rei.cor) {
-            
-            direcaoXeque = "cavalo";
-        }
-    }
-
-    if (rei.cor === "branco") {
-        if (tabuleiro[aLinha - 1][aColuna - 1] && tabuleiro[aLinha - 1][aColuna - 1].tipo === "peao" && tabuleiro[aLinha - 1][aColuna - 1].cor === "preto" ||
-            (tabuleiro[aLinha - 1][aColuna + 1] && tabuleiro[aLinha - 1][aColuna + 1].tipo === "peao" && tabuleiro[aLinha - 1][aColuna + 1].cor === "preto")
-        ) {
-            direcaoXeque = "peao"
-        }
-    } else if (rei.cor === "preto") {
-        if (tabuleiro[aLinha + 1][aColuna - 1] && tabuleiro[aLinha + 1][aColuna - 1].tipo === "peao" && tabuleiro[aLinha + 1][aColuna - 1].cor === "branco" ||
-            (tabuleiro[aLinha + 1][aColuna + 1] && tabuleiro[aLinha + 1][aColuna + 1].tipo === "peao" && tabuleiro[aLinha + 1][aColuna + 1].cor === "branco")
-        ) {
-            direcaoXeque = "peao"
-        }
-    }
-
+    // O rei está em xeque e nenhuma jogada consegue tirá-lo do xeque.
     return true;
-
-
-    checkValidation(copiaTabuleiro, outraCor)
 }

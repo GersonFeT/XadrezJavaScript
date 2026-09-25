@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xadrez</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -10,22 +11,56 @@
 <body>
 
   <div id="all-content">
+
     <div id="promocao">
-      <button class="opcao-promocao peca dama branco default" id="botao-dama"></button>
-      <button class="opcao-promocao peca torre branco default" id="botao-torre"></button>
-      <button class="opcao-promocao peca bispo branco default" id="botao-bispo"></button>
-      <button class="opcao-promocao peca cavalo branco default" id="botao-cavalo"></button>
+      <button class="opcao-promocao peca dama branco default" id="botao-dama" type="button"
+        aria-label="Promover para dama">
+      </button>
+
+      <button class="opcao-promocao peca torre branco default" id="botao-torre" type="button"
+        aria-label="Promover para torre">
+      </button>
+
+      <button class="opcao-promocao peca bispo branco default" id="botao-bispo" type="button"
+        aria-label="Promover para bispo">
+      </button>
+
+      <button class="opcao-promocao peca cavalo branco default" id="botao-cavalo" type="button"
+        aria-label="Promover para cavalo">
+      </button>
     </div>
+
     <div id="tabuleiro"></div>
+
   </div>
-  <button id="btn-menu" class="btn">⇾</button>
+
+  <button id="btn-menu" class="btn" type="button" aria-label="Abrir menu" aria-expanded="false">
+    ⇾
+  </button>
+
   <div id="menu">
-    <button id="trocar-pecas" class="btn">Trocar estilo das peças</button>
-  </div>
+
+    <button id="trocar-pecas" class="btn" type="button">
+      Trocar estilo das peças
+    </button>
+
+    <button id="modo-jogo" class="btn" type="button">
+      Modo: Stockfish
+    </button>
+
+    <div id="modo-descricao">
+      Você joga com as brancas contra o Stockfish.
+    </div>
 
   </div>
 
-  <script type="module" src="js/visual.js"></script>
+  <!--
+    Visual.js possui V maiúsculo.
+    Isso é importante em servidores Linux/GitHub Pages,
+    onde maiúsculas e minúsculas diferenciam arquivos.
+  -->
+  <script type="module" src="js/Visual.js"></script>
+
 </body>
 
 </html>

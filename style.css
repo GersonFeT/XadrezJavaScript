@@ -1,31 +1,39 @@
-:root{
+:root {
     --cor-fundo: #182026;
     --cor-borda-tabuleiro: #8B6538;
     --cor-botao: #333333;
+
     --cor-casa-branca-default: #f0d9b5;
     --cor-casa-preta-default: #b58863;
+
     --cor-casa-selecionada: #ffff99;
     --cor-casa-xeque: #ff0000;
+
     --cor-casa-branca-pixelart: #e0e8d0;
     --cor-casa-preta-pixelart: #709080;
     --cor-borda-tabuleiro-pixelart: #3E4C59;
 }
 
-#tabuleiro.pixelart{
-    border: 5px solid var(--cor-borda-tabuleiro-pixelart);
-}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
+
     height: 100vh;
+    margin: 0;
 
     background: var(--cor-fundo);
+
+    font-family: Arial, sans-serif;
 }
 
-#all-content{
+
+#all-content {
     display: inline-flex;
+    align-items: center;
 }
+
 
 #tabuleiro {
     display: grid;
@@ -37,43 +45,134 @@ body {
 }
 
 
-.btn{
-    background-color: var(--cor-botao);
-    min-height: 15px;
-    
-
-    color: var(--cor-borda-tabuleiro);
-    border-radius: 0.7px;
-    border: 1px solid #404040;
-    
-    cursor: pointer;
+#tabuleiro.pixelart {
+    border: 5px solid var(--cor-borda-tabuleiro-pixelart);
 }
 
-#btn-menu{
+
+/*
+    Botões
+*/
+
+.btn {
+    background-color: var(--cor-botao);
+
+    min-height: 30px;
+
+    color: var(--cor-borda-tabuleiro);
+
+    border-radius: 3px;
+    border: 1px solid #404040;
+
+    cursor: pointer;
+
+    padding: 6px 10px;
+}
+
+
+.btn:hover {
+    filter: brightness(1.2);
+}
+
+
+.btn:active {
+    filter: brightness(0.9);
+}
+
+
+/*
+    Botão do menu
+*/
+
+#btn-menu {
+    
+
+    top: 40%;
+    right: 0;
+
     height: 20%;
-    width: 1.5%;
-    
+    width: 35px;
+
+    padding: 0;
+
+    z-index: 20;
+
+    font-size: 20px;
 }
 
-#menu{
-    display: none;
-}
 
-#trocar-pecas{
+/*
+    Menu
+*/
+
+#menu {
+    position: fixed;
+
+    top: 50%;
+    right: 20.57%;
+
+    transform: translateY(-50%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    width: 220px;
+
+    padding: 15px;
+
     background-color: var(--cor-botao);
-    min-height: 15px;
-    max-height: 30px;
 
-    color: var(--cor-borda-tabuleiro);
-    border-radius: 0.7px;
-    border: 1px solid #404040;
-    
-    cursor: pointer;
-    
+    border: 3px solid var(--cor-borda-tabuleiro);
+
+    box-sizing: border-box;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+
+    z-index: 10;
 }
+
+
+#menu.aberto {
+    opacity: 1;
+
+    pointer-events: auto;
+
+    transform: translateY(-50%);
+}
+
+
+#menu.btn {
+    width: 100%;
+}
+
+
+#modo-descricao {
+    color: #d0d0d0;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+
+    text-align: center;
+}
+
+
+/*
+    Peças
+*/
 
 .peca {
     display: flex;
+
     justify-content: center;
     align-items: center;
 
@@ -82,36 +181,114 @@ body {
     background-position: center;
 }
 
-.peca.peao.branco.default { background-image: url(Imagens/Peao_branco_default.png);}
-.peca.torre.branco.default { background-image: url(Imagens/Torre_branco_default.png);}
-.peca.cavalo.branco.default { background-image: url(Imagens/Cavalo_branco_default.png);}
-.peca.bispo.branco.default { background-image: url(Imagens/Bispo_branco_default.png);}
-.peca.dama.branco.default { background-image: url(Imagens/Dama_branco_default.png);}
-.peca.rei.branco.default { background-image: url(Imagens/Rei_branco_default.png);}
 
-.peca.peao.preto.default { background-image: url(Imagens/Peao_preto_default.png);}
-.peca.torre.preto.default { background-image: url(Imagens/Torre_preto_default.png);}
-.peca.cavalo.preto.default { background-image: url(Imagens/Cavalo_preto_default.png);}
-.peca.bispo.preto.default { background-image: url(Imagens/Bispo_preto_default.png);}
-.peca.dama.preto.default { background-image: url(Imagens/Dama_preto_default.png);}
-.peca.rei.preto.default { background-image: url(Imagens/Rei_preto_default.png);}
+.peca.peao.branco.default {
+    background-image: url(Imagens/Peao_branco_default.png);
+}
 
-.peca.peao.branco.pixelart { background-image: url(Imagens/Peao_branco_pixelart.png);}
-.peca.torre.branco.pixelart { background-image: url(Imagens/Torre_branco_pixelart.png);}
-.peca.cavalo.branco.pixelart { background-image: url(Imagens/Cavalo_branco_pixelart.png);}
-.peca.bispo.branco.pixelart { background-image: url(Imagens/Bispo_branco_pixelart.png);}
-.peca.dama.branco.pixelart { background-image: url(Imagens/Dama_branco_pixelart.png);}
-.peca.rei.branco.pixelart { background-image: url(Imagens/Rei_branco_pixelart.png);}
+.peca.torre.branco.default {
+    background-image: url(Imagens/Torre_branco_default.png);
+}
 
-.peca.peao.preto.pixelart { background-image: url(Imagens/Peao_preto_pixelart.png);}
-.peca.torre.preto.pixelart { background-image: url(Imagens/Torre_preto_pixelart.png);}
-.peca.cavalo.preto.pixelart { background-image: url(Imagens/Cavalo_preto_pixelart.png);}
-.peca.bispo.preto.pixelart { background-image: url(Imagens/Bispo_preto_pixelart.png);}
-.peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
-.peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
+.peca.cavalo.branco.default {
+    background-image: url(Imagens/Cavalo_branco_default.png);
+}
 
-.pixelart{
+.peca.bispo.branco.default {
+    background-image: url(Imagens/Bispo_branco_default.png);
+}
+
+.peca.dama.branco.default {
+    background-image: url(Imagens/Dama_branco_default.png);
+}
+
+.peca.rei.branco.default {
+    background-image: url(Imagens/Rei_branco_default.png);
+}
+
+
+.peca.peao.preto.default {
+    background-image: url(Imagens/Peao_preto_default.png);
+}
+
+.peca.torre.preto.default {
+    background-image: url(Imagens/Torre_preto_default.png);
+}
+
+.peca.cavalo.preto.default {
+    background-image: url(Imagens/Cavalo_preto_default.png);
+}
+
+.peca.bispo.preto.default {
+    background-image: url(Imagens/Bispo_preto_default.png);
+}
+
+.peca.dama.preto.default {
+    background-image: url(Imagens/Dama_preto_default.png);
+}
+
+.peca.rei.preto.default {
+    background-image: url(Imagens/Rei_preto_default.png);
+}
+
+
+/*
+    Peças em Pixel Art
+*/
+
+.peca.peao.branco.pixelart {
+    background-image: url(Imagens/Peao_branco_pixelart.png);
+}
+
+.peca.torre.branco.pixelart {
+    background-image: url(Imagens/Torre_branco_pixelart.png);
+}
+
+.peca.cavalo.branco.pixelart {
+    background-image: url(Imagens/Cavalo_branco_pixelart.png);
+}
+
+.peca.bispo.branco.pixelart {
+    background-image: url(Imagens/Bispo_branco_pixelart.png);
+}
+
+.peca.dama.branco.pixelart {
+    background-image: url(Imagens/Dama_branco_pixelart.png);
+}
+
+.peca.rei.branco.pixelart {
+    background-image: url(Imagens/Rei_branco_pixelart.png);
+}
+
+
+.peca.peao.preto.pixelart {
+    background-image: url(Imagens/Peao_preto_pixelart.png);
+}
+
+.peca.torre.preto.pixelart {
+    background-image: url(Imagens/Torre_preto_pixelart.png);
+}
+
+.peca.cavalo.preto.pixelart {
+    background-image: url(Imagens/Cavalo_preto_pixelart.png);
+}
+
+.peca.bispo.preto.pixelart {
+    background-image: url(Imagens/Bispo_preto_pixelart.png);
+}
+
+.peca.dama.preto.pixelart {
+    background-image: url(Imagens/Dama_preto_pixelart.png);
+}
+
+.peca.rei.preto.pixelart {
+    background-image: url(Imagens/Rei_preto_pixelart.png);
+}
+
+
+.pixelart {
     display: flex;
+
     justify-content: center;
     align-items: center;
 
@@ -120,77 +297,147 @@ body {
     background-position: center;
 }
 
+
+/*
+    Casas
+*/
+
 .casabranca {
     background-color: var(--cor-casa-branca-default);
+
     width: 80px;
     height: 80px;
 
     display: flex;
+
     justify-content: center;
     align-items: center;
 
     font-size: 50px;
+
     cursor: pointer;
 }
+
 
 .casapreta {
     background-color: var(--cor-casa-preta-default);
+
     width: 80px;
     height: 80px;
 
     display: flex;
+
     justify-content: center;
     align-items: center;
 
     font-size: 50px;
+
     cursor: pointer;
 }
 
-.pixelart .casabranca, 
+
+.pixelart .casabranca,
 .casabranca.pixelart {
     background-color: var(--cor-casa-branca-pixelart);
 }
 
-.pixelart .casapreta, 
+
+.pixelart .casapreta,
 .casapreta.pixelart {
     background-color: var(--cor-casa-preta-pixelart);
 }
 
-#promocao{
+
+/*
+   Promoção  
+*/
+
+#promocao {
     display: none;
+
     flex-direction: column;
+
     align-items: center;
     justify-content: center;
+
     gap: 10px;
-    margin-left: 20px; 
+
+    margin-left: 20px;
+
     padding: 15px;
+
     background-color: var(--cor-botao);
+
     border: 3px solid var(--cor-borda-tabuleiro);
 }
+
 
 .opcao-promocao {
     width: 60px;
     height: 60px;
+
     border-radius: 8px;
+
     border: 2px solid transparent;
+
     cursor: pointer;
-    transition: transform 0.2s, border-color 0.2s;
+
+    transition:
+        transform 0.2s,
+        border-color 0.2s;
 }
+
+
+.opcao-promocao:hover {
+    transform: scale(1.05);
+
+    border-color: var(--cor-borda-tabuleiro);
+}
+
+
+/*
+    Xeque e seleção de peça/casa
+*/
 
 .casabranca.xeque,
 .casapreta.xeque {
     background-color: var(--cor-casa-xeque);
 }
 
+
 .casabranca.selecionada,
 .casapreta.selecionada {
     background-color: var(--cor-casa-selecionada);
+    
 }
 
-.casabranca:hover {
-    filter: brightness(1.1);
-}
 
+.casabranca:hover,
 .casapreta:hover {
     filter: brightness(1.1);
+}
+
+
+/*
+    Responsividade
+*/
+
+@media (max-width: 700px) {
+
+    #tabuleiro {
+        grid-template-columns: repeat(8, 11vw);
+        grid-template-rows: repeat(8, 11vw);
+    }
+
+
+    .casabranca,
+    .casapreta {
+        width: 11vw;
+        height: 11vw;
+    }
+
+
+    #menu {
+        width: min(220px, 70vw);
+    }
 }
