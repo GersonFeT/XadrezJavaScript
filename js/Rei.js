@@ -17,6 +17,11 @@ export function validarRei(tabuleiro,
             if (tabuleiro[inicioLinha][5] || tabuleiro[inicioLinha][6]) {
                 return false;
             } else {
+
+                const copiaTabuleiro = tabuleiro.map(linha => [...linha]);
+                copiaTabuleiro[inicioLinha][inicioColuna + 1] = copiaTabuleiro[inicioLinha][inicioColuna];
+                copiaTabuleiro[inicioLinha][inicioColuna] = null;
+                if (checkValidation(copiaTabuleiro, rei.cor, rei.cor, "before") === false) { return false; }
                 return true;
             }
 
@@ -24,7 +29,7 @@ export function validarRei(tabuleiro,
             return false;
         }
 
-    } else if (diffLinha === 0 && (inicioColuna - fimColuna) === 2) {
+    } else if (diffLinha === 0 && (inicioColuna - fimColuna) === 2 && rei.moveu === false) {
 
         const torre = tabuleiro[inicioLinha][inicioColuna - 4]
 
@@ -32,6 +37,13 @@ export function validarRei(tabuleiro,
             if (tabuleiro[inicioLinha][3] || tabuleiro[inicioLinha][2] || tabuleiro[inicioLinha][1]) {
                 return false;
             } else {
+                for (let i = 1; i < 4; i++) {
+                    const copiaTabuleiro = tabuleiro.map(linha => [...linha]);
+                    copiaTabuleiro[inicioLinha][inicioColuna - i] = copiaTabuleiro[inicioLinha][inicioColuna];
+                    copiaTabuleiro[inicioLinha][inicioColuna] = null;
+                    if (checkValidation(copiaTabuleiro, rei.cor, rei.cor, "before") === false) { return false; }
+                }
+
                 return true;
             }
         } else {
@@ -152,12 +164,12 @@ export function checkValidation(tabuleiro, id, turno, when) {
 
 }
 export function validarXequeMate(tabuleiro, cor) {
-    // Se o rei não está em xeque, não existe xeque-mate.
+    
     if (checkValidation(tabuleiro, cor, cor, "before")) {
         return false;
     }
 
-    // Procura todas as peças da cor que está em xeque.
+    
     for (let inicioLinha = 0; inicioLinha < 8; inicioLinha++) {
         for (let inicioColuna = 0; inicioColuna < 8; inicioColuna++) {
 
@@ -167,18 +179,18 @@ export function validarXequeMate(tabuleiro, cor) {
                 continue;
             }
 
-            // Tenta todos os destinos possíveis dessa peça.
+            
             for (let fimLinha = 0; fimLinha < 8; fimLinha++) {
                 for (let fimColuna = 0; fimColuna < 8; fimColuna++) {
 
                     const destino = tabuleiro[fimLinha][fimColuna];
 
-                    // Não pode capturar uma peça da mesma cor.
+                    
                     if (destino && destino.cor === cor) {
                         continue;
                     }
 
-                    // Usa a mesma validação de movimento do jogo.
+                    
                     if (!movimentoValido(
                         tabuleiro,
                         inicioLinha,
@@ -189,21 +201,20 @@ export function validarXequeMate(tabuleiro, cor) {
                         continue;
                     }
 
-                    // Cria uma cópia independente do tabuleiro.
+                    
                     const copiaTabuleiro = tabuleiro.map(linha =>
                         linha.map(peca =>
                             peca ? { ...peca } : null
                         )
                     );
 
-                    // Simula o movimento.
+                    
                     copiaTabuleiro[fimLinha][fimColuna] =
                         copiaTabuleiro[inicioLinha][inicioColuna];
 
                     copiaTabuleiro[inicioLinha][inicioColuna] = null;
 
-                    // Se depois do movimento o rei não estiver mais em xeque,
-                    // então existe uma jogada que salva o rei.
+                    
                     if (checkValidation(copiaTabuleiro, cor, cor, "before")) {
                         return false;
                     }
@@ -212,6 +223,6 @@ export function validarXequeMate(tabuleiro, cor) {
         }
     }
 
-    // O rei está em xeque e nenhuma jogada consegue tirá-lo do xeque.
+    
     return true;
 }
